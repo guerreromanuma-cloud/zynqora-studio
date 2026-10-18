@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090b12">
+<title>ZYNQORA — AI Cinematic Studio</title>
+<style>
+:root{color-scheme:dark;--bg:#090b12;--panel:#121722;--line:#283244;--blue:#8bbcff;--text:#f3f6ff;--muted:#9ba8bb}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+header{padding:22px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-size:23px;font-weight:900;letter-spacing:3px}
+.logo span{color:var(--blue)}
+.tag{font-size:10px;color:var(--muted);margin-top:5px;letter-spacing:1px}
+main{max-width:1000px;margin:auto;padding:22px 16px 45px}
+.eyebrow{color:var(--blue);font-size:11px;letter-spacing:2px;font-weight:bold}
+h1{font-size:clamp(29px,6vw,49px);line-height:1.08;margin:13px 0}
+p{color:var(--muted);line-height:1.6}
+.hero{padding:28px 20px;border:1px solid var(--line);border-radius:20px;background:radial-gradient(ellipse at 85% 10%,#263c60 0,transparent 45%),linear-gradient(145deg,#171e2c,#0c0f17)}
+.preview{margin-top:24px;min-height:190px;border:1px solid #34435a;border-radius:14px;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;background:linear-gradient(145deg,#18253a,#080b12)}
+.orb{font-size:48px;margin-bottom:12px}
+.preview strong{display:block;font-size:19px}
+.preview small{display:block;color:var(--muted);margin-top:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:15px;margin-top:20px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}
+h2{font-size:18px;margin:0 0 14px}
+label{display:block;font-size:13px;color:#d6deed;margin:14px 0 7px}
+input,select,textarea{width:100%;padding:12px;background:#090e18;border:1px solid #354157;border-radius:9px;color:white;font-size:14px}
+textarea{min-height:92px;resize:vertical}
+button{cursor:pointer;background:var(--blue);color:#07101d;border:0;border-radius:9px;padding:12px 15px;font-size:14px;font-weight:bold}
+button.secondary{background:#202b3d;color:#e7efff;border:1px solid #39485e}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+button:focus,input:focus,select:focus,textarea:focus{outline:2px solid #8bbcff;outline-offset:2px}
+.note{font-size:12px;color:var(--muted)}
+footer{text-align:center;padding:24px;color:#758197;font-size:11px}
+#status{color:var(--blue);font-size:13px;line-height:1.5}
+</style>
+</head>
+<body>
+<header>
+<div><div class="logo">ZYNQORA<span>.</span></div><div class="tag">AI CINEMATIC STUDIO</div></div>
+<button class="secondary" id="newProject">＋ Proyecto</button>
+</header>
+<main>
+<section class="hero">
+<div class="eyebrow">TU ESTUDIO CREATIVO</div>
+<h1>De una idea,<br>al universo cinematográfico.</h1>
+<p>Diseña tu próximo videoclip. Prepara personajes, imagina escenarios y organiza tus escenas desde un mismo lugar.</p>
+<div class="preview" id="preview">
+<div><div class="orb">✧</div><strong>Tu próxima película empieza aquí</strong><small>La vista previa de tu proyecto aparecerá en esta zona.</small></div>
+</div>
+</section>
+<div class="grid">
+<section class="card">
+<h2>01 · Tu proyecto</h2>
+<label for="project">Nombre del proyecto</label>
+<input id="project" placeholder="Ej. El último amanecer">
+<label for="format">Formato del vídeo</label>
+<select id="format"><option value="vertical">Vertical · TikTok / Shorts</option><option value="wide">Horizontal · YouTube / cine</option><option value="square">Cuadrado · Redes sociales</option></select>
+<label for="music">Canción (audio)</label>
+<input id="music" type="file" accept="audio/*">
+<p class="note">El audio se selecciona localmente; todavía no se sube a ningún servidor.</p>
+</section>
+<section class="card">
+<h2>02 · Diseña tu universo</h2>
+<label for="style">Estilo visual</label>
+<select id="style"><option>Cinematográfico 3D</option><option>Fantasía épica</option><option>Ciencia ficción</option><option>Animación estilizada</option><option>Realismo oscuro</option></select>
+<label for="character">Personaje protagonista</label>
+<input id="character" placeholder="Ej. Héroe con armadura futurista">
+<label for="scene">Descripción de la escena</label>
+<textarea id="scene" placeholder="Describe el lugar, la acción, la luz y el ambiente..."></textarea>
+<div class="actions"><button id="previewBtn">Actualizar concepto</button></div>
+</section>
+<section class="card">
+<h2>03 · Guion de escenas</h2>
+<p>Divide tu videoclip en momentos visuales antes de generar las animaciones.</p>
+<label for="duration">Duración aproximada de la canción</label>
+<select id="duration"><option>30 segundos</option><option>1 minuto</option><option selected>2 minutos</option><option>3 minutos</option><option>4 minutos</option></select>
+<div class="actions"><button id="addScene">＋ Añadir escena</button><button class="secondary" id="save">Guardar proyecto</button></div>
+<div id="scenes"></div>
+</section>
+<section class="card">
+<h2>04 · Estado del estudio</h2>
+<p id="status">Estudio iniciado. Puedes preparar tu primer concepto.</p>
+<p class="note">Esta primera versión organiza ideas y proyectos. La generación real de vídeo mediante modelos 3D e IA se integrará en las siguientes fases.</p>
+<div class="actions"><button class="secondary" id="export">Exportar proyecto JSON</button><button class="secondary" id="reset">Nuevo proyecto</button></div>
+</section>
+</div>
+</main>
+<footer>ZYNQORA · AI CINEMATIC STUDIO · PROTOTIPO 0.1</footer>
+<script>
+const $=id=>document.getElementById(id);
+let scenes=[];
+function message(t){$('status').textContent=t}
+function updatePreview(){
+const name=$('project').value.trim()||'Proyecto cinematográfico';
+const character=$('character').value.trim()||'Personaje protagonista';
+const scene=$('scene').value.trim()||'Escenario pendiente de definir';
+$('preview').innerHTML='<div><div class="orb">✧</div><strong></strong><small></small></div>';
+$('preview').querySelector('strong').textContent=name;
+$('preview').querySelector('small').textContent=character+' · '+scene;
+$('preview').style.aspectRatio=$('format').value==='wide'?'16/9':$('format').value==='square'?'1/1':'9/16';
+message('Concepto actualizado. Aún no se ha generado un vídeo real.');
+}
+function renderScenes(){
+$('scenes').innerHTML='';
+scenes.forEach((s,i)=>{
+const row=document.createElement('div');
+row.className='card';row.style.marginTop='10px';row.style.padding='12px';
+const title=document.createElement('strong');title.textContent='Escena '+(i+1);
+const desc=document.createElement('p');desc.textContent=s;
+const del=document.createElement('button');del.className='secondary';del.textContent='Eliminar';
+del.onclick=()=>{scenes.splice(i,1);renderScenes()};
+row.append(title,desc,del);$('scenes').appendChild(row);
+});
+}
+function data(){
+return {app:'ZYNQORA',version:'0.1',project:$('project').value,format:$('format').value,style:$('style').value,character:$('character').value,description:$('scene').value,duration:$('duration').value,scenes};
+}
+$('previewBtn').onclick=updatePreview;
+$('addScene').onclick=()=>{
+const s=$('scene').value.trim();
+if(!s){message('Escribe primero una descripción para la escena.');return}
+scenes.push(s);renderScenes();message('Escena añadida al guion.');
+};
+$('save').onclick=()=>{
+try{localStorage.setItem('zynqora-project',JSON.stringify(data()));message('Proyecto guardado en este navegador.')}
+catch(e){message('No se pudo guardar localmente. Usa Exportar proyecto JSON.')}
+};
+$('export').onclick=()=>{
+const blob=new Blob([JSON.stringify(data(),null,2)],{type:'application/json'});
+const url=URL.createObjectURL(blob);const a=document.createElement('a');
+a.href=url;a.download='zynqora-project.json';a.click();URL.revokeObjectURL(url);
+message('Archivo de proyecto preparado para exportar.');
+};
+$('reset').onclick=()=>{
+if(!confirm('¿Crear un proyecto nuevo? Guarda o exporta antes los cambios.'))return;
+$('project').value='';$('character').value='';$('scene').value='';scenes=[];renderScenes();updatePreview();
+};
+$('newProject').onclick=()=>$('reset').click();
+$('project').addEventListener('input',()=>{});
+$('music').onchange=()=>{const f=$('music').files[0];if(f)message('Audio seleccionado: '+f.name+'. Todavía no se ha sincronizado con escenas.')};
+updatePreview();
+</script>
+</body>
+</html>
